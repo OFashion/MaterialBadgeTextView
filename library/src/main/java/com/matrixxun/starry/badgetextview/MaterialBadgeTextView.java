@@ -20,6 +20,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.FrameLayout.LayoutParams;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatTextView;
 
@@ -32,6 +33,7 @@ public class MaterialBadgeTextView extends AppCompatTextView {
   private static final int KEY_SHADOW_COLOR = 0x55000000;
   private static final float X_OFFSET = 0f;
   private static final float Y_OFFSET = 1.75f;
+  public static final String TAG = "MaterialBadgeTextView";
   private int backgroundColor;
   private int borderColor;
   private float borderWidth;
@@ -99,10 +101,7 @@ public class MaterialBadgeTextView extends AppCompatTextView {
     /** 纯色小红点模式下若有文本需要从无变为有, 要归位view的大小. */
     String strText = text == null ? "" : text.toString().trim();
     if (isHighLightMode && !"".equals(strText)) {
-      ViewGroup.LayoutParams lp = getLayoutParams();
-      lp.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-      lp.width = ViewGroup.LayoutParams.WRAP_CONTENT;
-      setLayoutParams(lp);
+      resetLayoutParam();
       isHighLightMode = false;
     }
   }
@@ -153,7 +152,7 @@ public class MaterialBadgeTextView extends AppCompatTextView {
     try {
       temp = Integer.parseInt(count);
     } catch (Exception e) {
-      Log.e("MaterialBadgeTextView", "setBadgeCount", e);
+      Log.e(TAG, "setBadgeCount", e);
     }
     if (temp != -1) {
       setBadgeCount(temp, goneWhenZero);
@@ -195,6 +194,17 @@ public class MaterialBadgeTextView extends AppCompatTextView {
   /** @param isDisplayInToolbarMenu */
   public void setHighLightMode(boolean isDisplayInToolbarMenu) {
     isHighLightMode = true;
+    updateLayoutParam(isDisplayInToolbarMenu);
+    ShapeDrawable drawable = new ShapeDrawable(new OvalShape());
+    setLayerType(View.LAYER_TYPE_SOFTWARE, drawable.getPaint());
+    drawable.getPaint().setColor(backgroundColor);
+    drawable.getPaint().setAntiAlias(true);
+    setBackground(drawable);
+    setText("");
+    setVisibility(View.VISIBLE);
+  }
+
+  private void updateLayoutParam(boolean isDisplayInToolbarMenu) {
     ViewGroup.LayoutParams params = getLayoutParams();
     params.width = dp2px(getContext(), 8);
     params.height = params.width;
@@ -203,13 +213,18 @@ public class MaterialBadgeTextView extends AppCompatTextView {
       ((FrameLayout.LayoutParams) params).rightMargin = dp2px(getContext(), 8);
     }
     setLayoutParams(params);
-    ShapeDrawable drawable = new ShapeDrawable(new OvalShape());
-    setLayerType(View.LAYER_TYPE_SOFTWARE, drawable.getPaint());
-    drawable.getPaint().setColor(backgroundColor);
-    drawable.getPaint().setAntiAlias(true);
-    setBackground(drawable);
-    setText("");
-    setVisibility(View.VISIBLE);
+  }
+
+  private void resetLayoutParam() {
+    ViewGroup.LayoutParams param = getLayoutParams();
+    if (param instanceof FrameLayout.LayoutParams) {
+      FrameLayout.LayoutParams lp = (LayoutParams) param;
+      lp.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+      lp.width = ViewGroup.LayoutParams.WRAP_CONTENT;
+      lp.topMargin = 0;
+      lp.rightMargin = 0;
+      setLayoutParams(lp);
+    }
   }
 
   public void setBackgroundColor(int color) {
