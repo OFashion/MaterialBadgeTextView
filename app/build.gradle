@@ -5,7 +5,7 @@ android {
     buildToolsVersion "30.0.0"
     defaultConfig {
         applicationId "sample.badgeview.starry.matrixxun.com.materialbadgetextview"
-        minSdkVersion 15
+        minSdkVersion 23
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
