@@ -26,20 +26,16 @@ import android.widget.TextView;
 public class MaterialBadgeTextView extends TextView {
 
   private static final int DEFAULT_FILL_TYPE = 0;
-
+  private static final float SHADOW_RADIUS = 3.5f;
+  private static final int FILL_SHADOW_COLOR = 0x55000000;
+  private static final int KEY_SHADOW_COLOR = 0x55000000;
+  private static final float X_OFFSET = 0f;
+  private static final float Y_OFFSET = 1.75f;
   private int backgroundColor;
   private int borderColor;
   private float borderWidth;
   private float borderAlpha;
   private int ctType;
-
-  private static final float SHADOW_RADIUS = 3.5f;
-  private static final int FILL_SHADOW_COLOR = 0x55000000;
-  private static final int KEY_SHADOW_COLOR = 0x55000000;
-
-  private static final float X_OFFSET = 0f;
-  private static final float Y_OFFSET = 1.75f;
-
   private float density;
   private int mShadowRadius;
   private int shadowYOffset;
@@ -61,6 +57,15 @@ public class MaterialBadgeTextView extends TextView {
   public MaterialBadgeTextView(Context context, AttributeSet attrs, int defStyleAttr) {
     super(context, attrs, defStyleAttr);
     init(context, attrs);
+  }
+
+  public static int dp2px(Context context, float dpValue) {
+    try {
+      final float scale = context.getResources().getDisplayMetrics().density;
+      return (int) (dpValue * scale + 0.5f);
+    } catch (Exception e) {
+      return (int) (dpValue + 0.5f);
+    }
   }
 
   private void init(Context context, AttributeSet attrs) {
@@ -116,7 +121,7 @@ public class MaterialBadgeTextView extends TextView {
       return;
     }
     if (text.length() == 1) {
-        /** 第一种背景是一个正圆形, 当文本为个位数字时 */
+      /** 第一种背景是一个正圆形, 当文本为个位数字时 */
       int max = Math.max(targetWidth, targetHeight);
       ShapeDrawable circle;
       final int diameter = max - (2 * mShadowRadius);
@@ -133,7 +138,7 @@ public class MaterialBadgeTextView extends TextView {
         setBackground(circle);
       }
     } else if (text.length() > 1) {
-        /** 第二种背景是上下两边为直线的椭圆, 当文本长度大于1时 */
+      /** 第二种背景是上下两边为直线的椭圆, 当文本长度大于1时 */
       SemiCircleRectDrawable sr = new SemiCircleRectDrawable();
       ViewCompat.setLayerType(this, ViewCompat.LAYER_TYPE_SOFTWARE, sr.getPaint());
       sr.getPaint().setShadowLayer(mShadowRadius, shadowXOffset, shadowYOffset, KEY_SHADOW_COLOR);
@@ -262,13 +267,13 @@ public class MaterialBadgeTextView extends TextView {
     private final Paint mPaint;
     private RectF rectF;
 
-    public Paint getPaint() {
-      return mPaint;
-    }
-
     public SemiCircleRectDrawable() {
       mPaint = new Paint();
       mPaint.setAntiAlias(true);
+    }
+
+    public Paint getPaint() {
+      return mPaint;
     }
 
     @Override
@@ -306,15 +311,6 @@ public class MaterialBadgeTextView extends TextView {
     @Override
     public int getOpacity() {
       return PixelFormat.TRANSPARENT;
-    }
-  }
-
-  public static int dp2px(Context context, float dpValue) {
-    try {
-      final float scale = context.getResources().getDisplayMetrics().density;
-      return (int) (dpValue * scale + 0.5f);
-    } catch (Exception e) {
-      return (int) (dpValue + 0.5f);
     }
   }
 }

@@ -20,44 +20,14 @@ import android.widget.Toast;
 /** @author donghua.xdh */
 public class MenuItemBadge {
 
-  public static class Builder {
-
-    public int textBackgroundColor; // TRANSPARENT = 0;
-    public int textColor; // TRANSPARENT = 0;
-    public int iconTintColor; // TRANSPARENT = 0;
-    private Drawable iconDrawable;
-
-    public Builder() {}
-
-    public Builder textBackgroundColor(int textBackgroundColor) {
-      this.textBackgroundColor = textBackgroundColor;
-      return this;
-    }
-
-    public Builder textColor(int textColor) {
-      this.textColor = textColor;
-      return this;
-    }
-
-    public Builder iconTintColor(int iconTintColor) {
-      this.iconTintColor = iconTintColor;
-      return this;
-    }
-
-    public Builder iconDrawable(Drawable iconDrawable) {
-      this.iconDrawable = iconDrawable;
-      return this;
-    }
+  public static void update(
+      final Activity activity, final MenuItem menu, MenuItemBadge.Builder builder) {
+    update(activity, menu, builder, null);
   }
 
   //    public static void update(final MenuItem menu, int badgeCount) {
   //        update(null,menu, null, String.valueOf(formatNumber(badgeCount,true)));
   //    }
-
-  public static void update(
-      final Activity activity, final MenuItem menu, MenuItemBadge.Builder builder) {
-    update(activity, menu, builder, null);
-  }
 
   public static void update(
       final Activity activity,
@@ -148,10 +118,6 @@ public class MenuItemBadge {
     menu.setVisible(false);
   }
 
-  public interface ActionItemBadgeListener {
-    boolean onOptionsItemSelected(MenuItem menu);
-  }
-
   public static int convertDpToPx(Context context, float dp) {
     return (int) applyDimension(COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());
   }
@@ -171,6 +137,40 @@ public class MenuItemBadge {
       return Long.toString(value);
     } else {
       return "99+";
+    }
+  }
+
+  public interface ActionItemBadgeListener {
+    boolean onOptionsItemSelected(MenuItem menu);
+  }
+
+  public static class Builder {
+
+    public int textBackgroundColor; // TRANSPARENT = 0;
+    public int textColor; // TRANSPARENT = 0;
+    public int iconTintColor; // TRANSPARENT = 0;
+    private Drawable iconDrawable;
+
+    public Builder() {}
+
+    public Builder textBackgroundColor(int textBackgroundColor) {
+      this.textBackgroundColor = textBackgroundColor;
+      return this;
+    }
+
+    public Builder textColor(int textColor) {
+      this.textColor = textColor;
+      return this;
+    }
+
+    public Builder iconTintColor(int iconTintColor) {
+      this.iconTintColor = iconTintColor;
+      return this;
+    }
+
+    public Builder iconDrawable(Drawable iconDrawable) {
+      this.iconDrawable = iconDrawable;
+      return this;
     }
   }
 }

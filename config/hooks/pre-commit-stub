@@ -11,5 +11,5 @@ REPO_ROOT_DIR="$(git rev-parse --show-toplevel)"
 PRE_COMMIT_SCRIPT="${REPO_ROOT_DIR}/config/hooks/pre-commit"
 
 if [ -f $PRE_COMMIT_SCRIPT ]; then
-    source $PRE_COMMIT_SCRIPT
+  source $PRE_COMMIT_SCRIPT
 fi

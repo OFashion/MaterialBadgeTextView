@@ -1,39 +1,39 @@
 buildscript {
-  repositories {
-    jcenter()
-    google()
-  }
-  dependencies {
-    classpath 'com.android.tools.build:gradle:4.0.1'
-  }
+    repositories {
+        jcenter()
+        google()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:4.0.1'
+    }
 
 }
 
 plugins {
-  id "com.github.sherter.google-java-format" version "0.8"
+    id "com.github.sherter.google-java-format" version "0.8"
 }
 
 allprojects {
-  repositories {
-    jcenter()
-    google()
-  }
+    repositories {
+        jcenter()
+        google()
+    }
 }
 
 subprojects { project ->
-  project.tasks.withType(JavaCompile) {
-    dependsOn(installGitHooks)
-  }
+    project.tasks.withType(JavaCompile) {
+        dependsOn(installGitHooks)
+    }
 
-  repositories {
-    jcenter()
-    google()
-  }
+    repositories {
+        jcenter()
+        google()
+    }
 
 }
 
 googleJavaFormat {
-  toolVersion = "1.7"
+    toolVersion = "1.7"
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -43,9 +43,9 @@ googleJavaFormat {
 
 
 tasks.register('installGitHooks', Copy) {
-  from(file('config/hooks/pre-commit-stub')) {
-    rename 'pre-commit-stub', 'pre-commit'
-  }
-  into file('.git/hooks')
-  fileMode 0777
+    from(file('config/hooks/pre-commit-stub')) {
+        rename 'pre-commit-stub', 'pre-commit'
+    }
+    into file('.git/hooks')
+    fileMode 0777
 }
