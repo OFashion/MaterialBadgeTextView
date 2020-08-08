@@ -21,7 +21,7 @@ public class MainActivityFragment extends Fragment {
       LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
     View view = inflater.inflate(R.layout.fragment_main, container, false);
-    just_new_feature = (MaterialBadgeTextView) view.findViewById(R.id.just_new_feature);
+    just_new_feature = view.findViewById(R.id.just_new_feature);
     just_new_feature.setHighLightMode();
 
     TextView test_text = (MaterialBadgeTextView) view.findViewById(R.id.test_text);

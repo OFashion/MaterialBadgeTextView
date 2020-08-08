@@ -1,5 +1,6 @@
 package com.matrixxun.starry.badgetextview;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -13,17 +14,17 @@ import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
-import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.TextView;
-import androidx.core.view.ViewCompat;
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatTextView;
 
 /** Created by matrixxun on 2016/8/30. */
-public class MaterialBadgeTextView extends TextView {
+public class MaterialBadgeTextView extends AppCompatTextView {
 
   private static final int DEFAULT_FILL_TYPE = 0;
   private static final float SHADOW_RADIUS = 3.5f;
@@ -127,32 +128,19 @@ public class MaterialBadgeTextView extends TextView {
       final int diameter = max - (2 * mShadowRadius);
       OvalShape oval = new OvalShadow(mShadowRadius, diameter);
       circle = new ShapeDrawable(oval);
-      ViewCompat.setLayerType(this, ViewCompat.LAYER_TYPE_SOFTWARE, circle.getPaint());
+      this.setLayerType(View.LAYER_TYPE_SOFTWARE, circle.getPaint());
       circle
           .getPaint()
           .setShadowLayer(mShadowRadius, shadowXOffset, shadowYOffset, KEY_SHADOW_COLOR);
       circle.getPaint().setColor(backgroundColor);
-      if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN) {
-        setBackgroundDrawable(circle);
-      } else {
-        setBackground(circle);
-      }
+      setBackground(circle);
     } else if (text.length() > 1) {
       /** 第二种背景是上下两边为直线的椭圆, 当文本长度大于1时 */
       SemiCircleRectDrawable sr = new SemiCircleRectDrawable();
-      ViewCompat.setLayerType(this, ViewCompat.LAYER_TYPE_SOFTWARE, sr.getPaint());
+      setLayerType(View.LAYER_TYPE_SOFTWARE, sr.getPaint());
       sr.getPaint().setShadowLayer(mShadowRadius, shadowXOffset, shadowYOffset, KEY_SHADOW_COLOR);
       sr.getPaint().setColor(backgroundColor);
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-        setBackground(sr);
-      } else {
-        setBackgroundDrawable(sr);
-      }
-    } else {
-      /**
-       * 第三种情况就是text="", 即文本长度为0, 因为无任何文本, 则对当前的TextView背景不做任何更新,
-       * 但是有时候我们需要一个无字的纯色小圆形,用来表达强调.这种情况因为要重新设置View的大小, 所以不在这里表现, 请使用另外一个方法setHighLightMode()来完成.
-       */
+      setBackground(sr);
     }
   }
 
@@ -165,7 +153,7 @@ public class MaterialBadgeTextView extends TextView {
     try {
       temp = Integer.parseInt(count);
     } catch (Exception e) {
-
+      Log.e("MaterialBadgeTextView", "setBadgeCount", e);
     }
     if (temp != -1) {
       setBadgeCount(temp, goneWhenZero);
@@ -176,6 +164,7 @@ public class MaterialBadgeTextView extends TextView {
     setBadgeCount(count, true);
   }
 
+  @SuppressLint("SetTextI18n")
   public void setBadgeCount(int count, boolean goneWhenZero) {
     if (count > 0 && count <= 99) {
       setText(String.valueOf(count));
@@ -183,7 +172,7 @@ public class MaterialBadgeTextView extends TextView {
     } else if (count > 99) {
       setText("99+");
       setVisibility(View.VISIBLE);
-    } else if (count <= 0) {
+    } else {
       setText("0");
       if (goneWhenZero) {
         setVisibility(View.GONE);
@@ -215,14 +204,10 @@ public class MaterialBadgeTextView extends TextView {
     }
     setLayoutParams(params);
     ShapeDrawable drawable = new ShapeDrawable(new OvalShape());
-    ViewCompat.setLayerType(this, ViewCompat.LAYER_TYPE_SOFTWARE, drawable.getPaint());
+    setLayerType(View.LAYER_TYPE_SOFTWARE, drawable.getPaint());
     drawable.getPaint().setColor(backgroundColor);
     drawable.getPaint().setAntiAlias(true);
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-      setBackground(drawable);
-    } else {
-      setBackgroundDrawable(drawable);
-    }
+    setBackground(drawable);
     setText("");
     setVisibility(View.VISIBLE);
   }
@@ -290,7 +275,7 @@ public class MaterialBadgeTextView extends TextView {
     }
 
     @Override
-    public void draw(Canvas canvas) {
+    public void draw(@NonNull Canvas canvas) {
       float R = (float) (rectF.bottom * 0.4);
       if (rectF.right < rectF.bottom) {
         R = (float) (rectF.right * 0.4);

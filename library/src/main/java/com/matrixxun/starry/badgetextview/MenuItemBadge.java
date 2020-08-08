@@ -41,8 +41,8 @@ public class MenuItemBadge {
 
     badge = (FrameLayout) menu.getActionView();
 
-    badgeTextView = (MaterialBadgeTextView) badge.findViewById(R.id.menu_badge);
-    imageView = (ImageView) badge.findViewById(R.id.menu_badge_icon);
+    badgeTextView = badge.findViewById(R.id.menu_badge);
+    imageView = badge.findViewById(R.id.menu_badge_icon);
 
     // Display icon in ImageView
     if (imageView != null && builder != null) {
@@ -105,8 +105,7 @@ public class MenuItemBadge {
       return null;
     }
     FrameLayout badge = (FrameLayout) menu.getActionView();
-    MaterialBadgeTextView badgeView = (MaterialBadgeTextView) badge.findViewById(R.id.menu_badge);
-    return badgeView;
+    return badge.findViewById(R.id.menu_badge);
   }
 
   /**
@@ -123,11 +122,7 @@ public class MenuItemBadge {
   }
 
   public static void setBackgroundCompat(View v, Drawable d) {
-    if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-      v.setBackgroundDrawable(d);
-    } else {
-      v.setBackground(d);
-    }
+    v.setBackground(d);
   }
 
   public static String formatNumber(int value, boolean limitLength) {
